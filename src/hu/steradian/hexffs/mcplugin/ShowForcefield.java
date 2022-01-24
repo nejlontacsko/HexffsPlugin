@@ -20,7 +20,7 @@ public class ShowForcefield implements Listener {
         Pyramid
     }
 
-    Shape shape = Shape.Cube;
+    Shape shape = Shape.FibonacciSphere;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -42,7 +42,7 @@ public class ShowForcefield implements Listener {
                                     targetLocation = event.getClickedBlock().getLocation().clone();
                                     targetLocation.add(x, y, z);
                                     Particle.DustOptions dustOptions = new Particle.DustOptions(Color.AQUA, (float) r);
-                                    targetLocation.getWorld().spawnParticle(Particle.REDSTONE, targetLocation, 10, .125, .125, .125, 0, dustOptions, true);
+                                    targetLocation.getWorld().spawnParticle(Particle.REDSTONE, targetLocation, 3, .125, .125, .125, 0, dustOptions, true);
                                 }
                             }
                         }
@@ -68,7 +68,7 @@ public class ShowForcefield implements Listener {
                                 targetLocation = event.getClickedBlock().getLocation().clone();
                                 targetLocation.add(x, y * r, z);
                                 Particle.DustOptions dustOptions = new Particle.DustOptions(Color.AQUA, (float) r);
-                                targetLocation.getWorld().spawnParticle(Particle.REDSTONE, targetLocation, 10, .125, .125, .125, 100, dustOptions, true);
+                                targetLocation.getWorld().spawnParticle(Particle.REDSTONE, targetLocation, 3, .125, .125, .125, 100, dustOptions, true);
                             }
                         }
                     }.runTask(Main.getPlugin());
@@ -76,21 +76,24 @@ public class ShowForcefield implements Listener {
                 case Cube:
                     new BukkitRunnable() {
                         Location targetLocation;
-                        int edge = 100;
-                        double r = 20, x, y, z;
+                        int nodeCount = 60;
+                        double r = 20, x, y, z, step = nodeCount/4;
                         @Override
                         public void run() {
+                            //for (double layer = -r; layer <= r; layer += step) {
+                            for (double layer = -Math.PI; layer <= Math.PI; layer += Math.PI / step) {
+                                y = r * Math.cos(layer);
+                                for (int i = 0; i < nodeCount; i++) {
+                                    x = Formula.trapezoid(i, 0, nodeCount / 4, nodeCount / 2, 3 * nodeCount / 4, nodeCount, nodeCount / 4) * r;
+                                    z = Formula.trapezoid(i, 0, nodeCount / 4, nodeCount / 2, 3 * nodeCount / 4, nodeCount, 0) * r;
 
-                            for (int i = 0; i < edge; i++) {
+                                    targetLocation = event.getClickedBlock().getLocation().clone();
+                                    targetLocation.add(x, y, z);
 
-                                x = Formula.trapezoid(i, 0, edge/4, edge/2, 3*edge/4, edge, edge/4) * r;
-                                y = Formula.trapezoid(i, 0, edge/4, edge/2, 3*edge/4, edge, edge/2) * r;
-                                z = Formula.trapezoid(i, 0, edge/4, edge/2, 3*edge/4, edge, 0) * r;
-
-                                targetLocation = event.getClickedBlock().getLocation().clone();
-                                targetLocation.add(x, y, z);
-                                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.AQUA, (int)r);
-                                targetLocation.getWorld().spawnParticle(Particle.REDSTONE, targetLocation, 30, .125, .125, .125, 100, dustOptions, true);
+                                    Particle.DustOptions dustOptions = new Particle.DustOptions(Color.AQUA, (int) r);
+                                    targetLocation.getWorld().spawnParticle(Particle.REDSTONE, targetLocation, 3, .125, .125, .125, 10, dustOptions, true);
+                                }
+                                Bukkit.getLogger().info("y: " + y + "; loc: " + targetLocation.toString());
                             }
                         }
                     }.runTask(Main.getPlugin());
