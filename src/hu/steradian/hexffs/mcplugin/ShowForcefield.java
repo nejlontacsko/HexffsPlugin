@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.block.data.BlockData;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ShowForcefield implements Listener {
-    public static enum Shape
+    public enum Shape
     {
         DescartesSphere,
         FibonacciSphere,
@@ -23,11 +23,11 @@ public class ShowForcefield implements Listener {
     Shape shape = Shape.Cube;
 
     @EventHandler
-    public void Toggle(PlayerInteractEvent event) {
+    public void onInteract(PlayerInteractEvent event) {
         Bukkit.getLogger().info("event");
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             switch (shape) {
-                case DescartesSphere -> {
+                case DescartesSphere:
                     new BukkitRunnable() {
                         Location targetLocation;
                         double r = 20, x, y, z;
@@ -47,8 +47,8 @@ public class ShowForcefield implements Listener {
                             }
                         }
                     }.runTask(Main.getPlugin());
-                }
-                case FibonacciSphere -> {
+                    break;
+                case FibonacciSphere:
                     new BukkitRunnable() {
                         Location targetLocation;
                         double r = 20, x, y, z;
@@ -72,19 +72,19 @@ public class ShowForcefield implements Listener {
                             }
                         }
                     }.runTask(Main.getPlugin());
-                }
-                case Cube -> {
+                    break;
+                case Cube:
                     new BukkitRunnable() {
                         Location targetLocation;
-                        int edge = 20;
-                        double r = 10, x, y, z;
+                        int edge = 100;
+                        double r = 20, x, y, z;
                         @Override
                         public void run() {
 
                             for (int i = 0; i < edge; i++) {
 
                                 x = Formula.trapezoid(i, 0, edge/4, edge/2, 3*edge/4, edge, edge/4) * r;
-                                y = Formula.trapezoid(i, 0, edge/4, edge/2, 3*edge/4, edge, 0) * r;
+                                y = Formula.trapezoid(i, 0, edge/4, edge/2, 3*edge/4, edge, edge/2) * r;
                                 z = Formula.trapezoid(i, 0, edge/4, edge/2, 3*edge/4, edge, 0) * r;
 
                                 targetLocation = event.getClickedBlock().getLocation().clone();
@@ -94,10 +94,9 @@ public class ShowForcefield implements Listener {
                             }
                         }
                     }.runTask(Main.getPlugin());
-                }
-                case Pyramid -> {
-
-                }
+                    break;
+                case Pyramid:
+                    break;
             }
         }
     }
