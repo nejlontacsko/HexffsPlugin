@@ -6,9 +6,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends JavaPlugin implements Listener {
 
     private static Main plugin;
+    private static List<Node> nodes = new ArrayList<Node>();
 
     @Override
     public void onLoad() {
@@ -23,6 +27,14 @@ public class Main extends JavaPlugin implements Listener {
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new ShowForcefield(), this);
+    }
+
+    public static void registerNode(Node node) {
+        nodes.add(node);
+    }
+
+    public static List<Node> getNodes() {
+        return nodes;
     }
 
     @Override
