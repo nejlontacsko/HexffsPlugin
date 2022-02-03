@@ -1,10 +1,13 @@
 package hu.steradian.hexffs.mcplugin;
 
+import hu.steradian.hexffs.mcplugin.fun.Coolant;
+import hu.steradian.hexffs.mcplugin.fun.Refrigerator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,9 @@ public class Main extends JavaPlugin implements Listener {
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new ShowForcefield(), this);
+        pm.registerEvents(new Coolant(), this);
+
+        Refrigerator.registerRefrigeratorRecipe();
     }
 
     public static void registerNode(Node node) {
